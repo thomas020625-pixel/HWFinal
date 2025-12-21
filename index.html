@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歌手官方網站 | Singer Official Site</title>
+    <style>
+        /* --- 1. 基礎設定 --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden; /* 防止橫向滾動條 */
+        }
+
+        /* --- 2. 導覽列 --- */
+        header {
+            background-color: rgba(18, 18, 18, 0.95);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(5px); /* 毛玻璃效果 */
+            border-bottom: 1px solid #333;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li { margin: 0 20px; }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        /* 導覽列下劃線動畫 */
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ff4757;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after { width: 100%; }
+
+        /* --- 3. 首頁全螢幕 Hero Section --- */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            background-color: #000;
+            /* 請替換成您的歌手大圖 */
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(18,18,18,1)), url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            opacity: 0; /* 初始隱藏，靠動畫顯示 */
+            animation: heroFadeIn 1.5s ease-out forwards;
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin: 0 0 20px 0;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            text-shadow: 0 4px 30px rgba(255, 71, 87, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+
+        .cta-btn {
+            padding: 15px 50px;
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        @keyframes heroFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 4. 通用容器與標題 --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 20px; /* 上下留白 */
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #ff4757;
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- 5. 動態淡入效果 (Scroll Reveal) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 6. 簡介區塊樣式 --- */
+        .intro-block {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 120px;
+            align-items: center;
+        }
+
+        .intro-img {
+            flex: 1;
+            height: 450px;
+            background-color: #222;
+            border-radius: 12px;
+            /* 模擬圖片 */
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 1px solid #333;
+            color: #555;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 圖片裝飾框線 */
+        .intro-img::before {
+            content: '';
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .intro-text p {
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* --- 7. 音樂作品 (唱片牆 Grid) --- */
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .album-card {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .album-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .album-cover img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .album-info { padding: 20px; text-align: center; }
+        .album-title { font-weight: bold; color: #fff; font-size: 1.1rem; margin-bottom: 5px; }
+        .album-meta { color: #666; font-size: 0.9rem; }
+
+        /* --- 8. 頁尾 --- */
+        footer {
+            background-color: #050505;
+            padding: 80px 20px 40px;
+            margin-top: 50px;
+            border-top: 1px solid #222;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .footer-col h4 { color: #ff4757; margin-bottom: 20px; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col li { margin-bottom: 10px; }
+        .footer-col a { color: #888; text-decoration: none; transition: color 0.3s; }
+        .footer-col a:hover { color: #fff; }
+
+        .copyright {
+            text-align: center;
+            color: #444;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 0.8rem;
+        }
+
+        /* --- RWD 手機適配 --- */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 3rem; letter-spacing: 5px; }
+            .intro-block { flex-direction: column; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">HOME</a></li>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#music">MUSIC</a></li>
+                <li><a href="#tour">TOUR</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>SINGER NAME</h1>
+            <p>THE WORLD TOUR 2025</p>
+            <a href="#music" class="cta-btn">LATEST ALBUM</a>
+        </div>
+    </section>
+
+    <div class="container" id="about">
+        <h2 class="section-title reveal">關於歌手</h2>
+        
+        <div class="intro-block reveal">
+            <div class="intro-img">[ 歌手形象照 ]</div>
+            <div class="intro-text">
+                <h3>靈魂與聲音的共鳴</h3>
+                <p>在這裡輸入歌手的第一段介紹。這段文字會隨著使用者滑動而優雅地浮現。使用深灰色調與紅色點綴，能營造出沈穩而充滿爆發力的視覺感受。</p>
+                <p>不管是R&B還是靈魂樂，每一個音符都是故事。</p>
+            </div>
+        </div>
+
+        <div class="intro-block reveal" style="flex-direction: row-reverse;">
+            <div class="intro-img">[ 舞台演出照 ]</div>
+            <div class="intro-text">
+                <h3>歷程與成就</h3>
+                <p>自2020年出道以來，橫掃多項音樂大獎。這裡可以列出金曲獎、或是各大音樂榜單的成績。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="music" style="background-color: #161616; width: 100%; max-width: 100%;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+            <h2 class="section-title reveal">音樂作品</h2>
+            
+            <div class="album-grid">
+                <div class="album-card reveal">
+                    <div class="album-cover">Cover Art 1</div>
+                    <div class="album-info">
+                        <div class="album-title">Midnight Blue</div>
+                        <div class="album-meta">2025 • Album</div>
+                    </div>
+                </div>
+
+                <div class="album-card reveal">
+                    <div class="album-cover">Cover Art 2</div>
+                    <div class="album-info">
+                        <div class="album-title">Neon Lights</div>
+                        <div class="album-meta">2024 • Single</div>
+                    </div>
+                </div>
+
+                <div class="album-card reveal">
+                    <div class="album-cover">Cover Art 3</div>
+                    <div class="album-info">
+                        <div class="album-title">Echoes</div>
+                        <div class="album-meta">2023 • EP</div>
+                    </div>
+                </div>
+
+                <div class="album-card reveal">
+                    <div class="album-cover">Cover Art 4</div>
+                    <div class="album-info">
+                        <div class="album-title">Origins</div>
+                        <div class="album-meta">2022 • Debut</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>EXPLORE</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Music</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>SOCIAL</h4>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">YouTube</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT</h4>
+                <ul>
+                    <li><a href="#">Management</a></li>
+                    <li><a href="#">Press Inquiry</a></li>
+                    <li><a href="#">Booking</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">&copy; 2025 SINGER NAME. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // 等待頁面載入完成
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. 選取所有帶有 'reveal' class 的元素
+            const reveals = document.querySelectorAll('.reveal');
+
+            // 2. 設定觀察器選項
+            const options = {
+                threshold: 0.15 // 當元素露出 15% 時觸發
+            };
+
+            // 3. 建立觀察器 (Intersection Observer)
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 當元素進入畫面，加上 'active' class
+                        entry.target.classList.add('active');
+                        // 動畫跑完後，停止觀察該元素（節省效能）
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, options);
+
+            // 4. 開始觀察每個元素
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>

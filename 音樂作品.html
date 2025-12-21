@@ -1,0 +1,88 @@
+<style>
+    /* 音樂作品專屬樣式 */
+    .album-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 自動填滿並自適應寬度 */
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .album-card {
+        background-color: #1f1f1f;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #333;
+    }
+
+    .album-card:hover {
+        transform: translateY(-10px); /* 懸停時輕微浮起 */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    /* 專輯封面預留框 */
+    .album-cover {
+        width: 100%;
+        aspect-ratio: 1 / 1; /* 強制正方形 */
+        background-color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #333;
+    }
+
+    .album-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .album-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #fff;
+    }
+
+    .album-year {
+        font-size: 0.9rem;
+        color: #888;
+    }
+</style>
+
+<div class="container">
+    <h2>所有專輯 (Discography)</h2>
+    
+    <div class="album-grid">
+        <div class="album-card">
+            <div class="album-cover">[ 專輯封面 1 ]</div>
+            <div class="album-info">
+                <div class="album-title">首張同名專輯</div>
+                <div class="album-year">2021 | Studio Album</div>
+            </div>
+        </div>
+
+        <div class="album-card">
+            <div class="album-cover">[ 專輯封面 2 ]</div>
+            <div class="album-info">
+                <div class="album-title">午夜飛行</div>
+                <div class="album-year">2022 | Single</div>
+            </div>
+        </div>
+
+        <div class="album-card">
+            <div class="album-cover">[ 專輯封面 3 ]</div>
+            <div class="album-info">
+                <div class="album-title">虛擬世界</div>
+                <div class="album-year">2023 | EP</div>
+            </div>
+        </div>
+
+        <div class="album-card">
+            <div class="album-cover">[ 專輯封面 4 ]</div>
+            <div class="album-info">
+                <div class="album-title">未來的信</div>
+                <div class="album-year">2024 | Studio Album</div>
+            </div>
+        </div>
+    </div>
+</div>
