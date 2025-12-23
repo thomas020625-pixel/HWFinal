@@ -239,37 +239,90 @@
         .album-title { font-weight: bold; color: #fff; font-size: 1.1rem; margin-bottom: 5px; }
         .album-meta { color: #666; font-size: 0.9rem; }
 
-        /* --- 8. 頁尾 --- */
-        footer {
-            background-color: #050505;
-            padding: 80px 20px 40px;
-            margin-top: 50px;
-            border-top: 1px solid #222;
-        }
+        /* --- 網頁地圖 Footer 專屬樣式 --- */
+    footer {
+        background-color: #0a0a0a;
+        padding: 60px 0 30px;
+        border-top: 1px solid #222;
+        margin-top: 80px;
+    }
 
-        .footer-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+    .footer-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 40px;
+    }
+
+    .footer-section h4 {
+        color: #fff;
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .footer-section h4::after {
+        content: '';
+        position: absolute;
+        left: 0; bottom: -8px;
+        width: 30px; height: 2px;
+        background-color: #ff4757;
+    }
+
+    .footer-section p {
+        font-size: 0.9rem;
+        color: #888;
+        line-height: 1.8;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links a {
+        color: #888;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+
+    .footer-links a:hover {
+        color: #ff4757;
+        padding-left: 5px;
+    }
+
+    .copyright-bar {
+        text-align: center;
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid #1a1a1a;
+        color: #555;
+        font-size: 0.85rem;
+    }
+
+    /* 手機版適配 */
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: 1fr;
             text-align: center;
         }
-        
-        .footer-col h4 { color: #ff4757; margin-bottom: 20px; }
-        .footer-col ul { list-style: none; padding: 0; }
-        .footer-col li { margin-bottom: 10px; }
-        .footer-col a { color: #888; text-decoration: none; transition: color 0.3s; }
-        .footer-col a:hover { color: #fff; }
-
-        .copyright {
-            text-align: center;
-            color: #444;
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid #1a1a1a;
-            font-size: 0.8rem;
+        .footer-section h4::after {
+            left: 50%;
+            transform: translateX(-50%);
         }
+        .footer-links a:hover {
+            padding-left: 0;
+        }
+    }
+
         /* --- 歌曲精選 (Video Highlights) --- */
     .highlight-item {
          display: flex;
@@ -371,24 +424,72 @@
     }
 }
 
-/* 影片外層容器 (維持 16:9 比例) */
+/* 修改後的影片/圖片容器 */
 .video-wrapper {
-    flex: 1.2; /* 影片佔比較大 */
+    flex: 0 0 560px; /* 關鍵：不放大、不縮小，固定基礎寬度為 560px */
+    max-width: 100%; /* 確保在小螢幕時不會超出邊界 */
+    height: 315px;   /* 固定高度 */
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 (9/16 = 0.5625) */
-    height: 0;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background-color: #000;
 }
 
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* 確保圖片填滿容器且不變形 */
+.video-cover {
     width: 100%;
     height: 100%;
-    border: none;
+    object-fit: cover; /* 關鍵：圖片會自動裁切以填滿框框，不會被拉長 */
+    display: block;
+}
+
+/* 播放按鈕圖示 (疊加在圖片上) */
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background-color: rgba(255, 71, 87, 0.9); /* 品牌紅 */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* 播放三角形 */
+.play-overlay::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 0 15px 25px;
+    border-color: transparent transparent transparent #ffffff;
+    margin-left: 5px;
+}
+
+/* 懸停效果 */
+.video-wrapper:hover .video-cover {
+    transform: scale(1.05);
+}
+
+.video-wrapper:hover .play-overlay {
+    background-color: #ff4757;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* 針對 RWD 手機版的優化 */
+@media (max-width: 992px) {
+    .video-wrapper {
+        flex: 1;      /* 在中型螢幕以下恢復彈性 */
+        width: 100%; 
+        height: auto;
+        aspect-ratio: 16 / 9; /* 維持標準電影比例 */
+    }
 }
 
 /* 文字介紹區塊 */
@@ -467,7 +568,7 @@
         <h2 class="section-title reveal">歌手之路</h2>
         
         <div class="intro-block reveal">
-            <div class="intro-img">[ 歌手形象照 ]</div>
+            <div class="intro-img"><img src=.1.jpg></div>
             <div class="intro-text">
                 <h3>早期與音樂啟蒙</h3>
                 <p>張敬軒—粉絲稱其為「軒仔」及「軒公」，於1981年2月1日出生於中國廣州。他的家庭具有藝術氛圍，母親是京劇花旦，父親則擅長演奏樂器，這為他後來的音樂之路奠定了基礎。</p>
@@ -476,28 +577,28 @@
         </div>
 
         <div class="intro-block reveal" style="flex-direction: row-reverse;">
-            <div class="intro-img">[ 舞台演出照 ]</div>
+            <div class="intro-img"><img src=2.2.jpg></div>
             <div class="intro-text">
                 <h3>歷程與成就</h3>
-                <p>2002年，張敬軒正式到香港發展，並以一首國語歌曲《斷點》在華語樂壇迅速走紅，奠定了他作為優秀創作歌手的形象。堅持與決心： 隨後的《My Way》成為他的代表作之一，這首歌唱出了年輕人追求夢想的堅定與熱忱，成為一代人的勵志歌曲。簽約唱片公司： 2006年，他正式轉投環球唱片公司，開啟了他在香港樂壇的黃金時代。</p>
+                <p>2002年，張敬軒正式到香港發展，並以一首國語歌曲《斷點》在華語樂壇迅速走紅，奠定了他作為優秀創作歌手的形象。堅持與決心： 隨後的《My Way》成為他的代表作之一，這首歌唱出了年輕人追求夢想的堅定與熱忱，成為一代人的勵志歌曲。2006年，他正式轉投環球唱片公司，開啟了他在香港樂壇的黃金時代。</p>
             </div>
         </div>
 
         <div class="intro-block reveal">
-            <div class="intro-img">[ 歌手形象照 ]</div>
+            <div class="intro-img"><img src=3.2.jpg></div>
             <div class="intro-text">
                 <h3>發展與成名期 (2002–2006)</h3>
                 <p>轉型演唱粵語歌曲後，張敬軒的事業進入高峰期。2007年的《酷愛》成為其標誌性作品，同年橫掃各大頒獎典禮。隨後的《櫻花樹下》（2008）、《春秋》（2009）、《塵埃落定》（2010）等一系列歌曲，確立了他在香港樂壇頂級實力唱將的地位。</p>
                 <p>憑藉廣闊的音域、細膩的情感處理和完美的現場表現，被樂迷譽為「行走的CD」，成為公認的實力派代表。
-                舞台劇嘗試： 除了流行音樂，他也積極參與舞台劇演出，如與王菀之合作的《I Love You Boyz / Girls》，展現其多元的藝術天賦。</p>
+                除了流行音樂，他也積極參與舞台劇演出，如與王菀之合作的《I Love You Boyz / Girls》，展現其多元的藝術天賦。</p>
             </div>
         </div>
 
         <div class="intro-block reveal" style="flex-direction: row-reverse;">
-            <div class="intro-img">[ 舞台演出照 ]</div>
+            <div class="intro-img"><img src=4.1.jpg></div>
             <div class="intro-text">
                 <h3>多元發展與文化貢獻 (2010s–至今)</h3>
-                <p>樂壇領軍人物： 進入2010年代末期，張敬軒多次獲得香港樂壇最高榮譽，包括「叱咤樂壇男歌手金獎」及「最受歡迎男歌星」等，正式成為香港樂壇中生代的領軍人物。
+                <p>=進入2010年代末期，張敬軒多次獲得香港樂壇最高榮譽，包括「叱咤樂壇男歌手金獎」及「最受歡迎男歌星」等，正式成為香港樂壇中生代的領軍人物。
                 除了樂壇發展，在文化保育方面也有所供獻。2018年，他斥資活化並經營了香港歷史建築「仙后餐廳」（The Junket），將餐廳變為一個結合餐飲、音樂表演和文化藝術的空間，展現了他對本地文化保育的熱忱。
                 近年作品如《俏郎君》、《隱形遊樂場》等，在詞曲意境上更趨成熟，持續引領樂壇潮流，並保持了極高的話題性與藝術水準。</p>
                 <p> 在個人演唱會，如《HINSIDEOUT》、《The Next 20》，屢創佳績，一票難求，證明了其驚人的市場號召力和舞台魅力。在2023年，張敬軒再次獲得「叱咤我最喜愛的男歌手」，在各位後起之秀中再次證明其實力派歌手的頭銜。</p>
@@ -563,63 +664,78 @@
             </div>
         </div>
     </div>
+
     <div class="container" id="highlights">
         <h2 class="section-title reveal">歌曲精選</h2>
         
         <div class="highlight-item reveal">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
+            <a href="https://www.youtube.com/watch?v=4Ch6C-U6dcs" target="_blank" class="video-wrapper">
+                <img src="https://img.youtube.com/vi/4Ch6C-U6dcs/hqdefault.jpg" alt="青春告別式" class="video-cover">
+        
+                <div class="play-overlay"></div>
+        </a>
+
             <div class="highlight-text">
-                <div class="song-meta">2025 • Lead Single</div>
-                <h3>無盡的夜 (Endless Night)</h3>
-                <p>這首歌曲是新專輯的主打單曲，描述了在繁華都市中迷失自我的孤獨感。MV 特別前往冰島取景，壯闊的冰川與極光呼應了歌曲中空靈而高亢的副歌。</p>
-                <p>導演運用了大量的冷色調光影，象徵內心的掙扎與最後看見的一絲希望。</p>
+                <div class="song-meta">2024 • 跨年單曲</div>
+                <h3>青春告別式</h3>
+                <p>趁青春流逝前，談場終身無悔的戀愛</p>
+                <p>張敬軒履行對樂迷的承諾，在踏入2024年1月1日前的一刻，派上全新作品〈青春告別式〉，歌曲延續〈隱形遊樂場〉創作班底，黃偉文填詞, 張敬軒作曲監製，Johnny Yim編曲, 記錄青春在無聲無息流走的一剎。縱有心理準備，但鬢際斑白來襲，還是令人束手無策。與其以怨悔、歉疚和自責去建構這告別式，何不趁青春老去前，留下一段刻骨銘心的愛戀經歷。或許無後顧的衝動，就是對青春的最後致敬。</p>
             </div>
         </div>
 
         <div class="highlight-item reveal">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/5qap5aO4i9A" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
+            <a href="https://www.youtube.com/watch?v=y9ntnHvD4tQ" target="_blank" class="video-wrapper">
+                <img src="https://img.youtube.com/vi/y9ntnHvD4tQ/maxresdefault.jpg" alt="隱形遊樂場" class="video-cover">
+        
+                <div class="play-overlay"></div>
+        </a>
+
             <div class="highlight-text">
-                <div class="song-meta">2024 • Fan Favorite</div>
-                <h3>心跳頻率 (Heartbeat)</h3>
-                <p>節奏輕快的 R&B 曲風，是演唱會上全場大合唱的必備曲目。歌詞講述了戀愛初期那種忐忑不安卻又甜蜜的心情。</p>
-                <p>影片採用了一鏡到底的拍攝手法，展現了歌手精湛的舞技與舞台魅力。</p>
+                <div class="song-meta">2023 • 年度代表作</div>
+                <h3>隱形遊樂場</h3>
+                <p>2023 年回歸唱作人首部曲 Wyman 操刀加持又一知性動人作品荒野都可建造樂園 廢城也能重塑堡壘要信心中那一個隱形遊樂場 能令我們乘著木馬 到達夢想彼岸</p>
+
+                <p>總說世上最好的安排往往是突如其來、在無預期的街頭轉角遇上毫無預料的靈感觸動。張敬軒就在離港遠赴倫敦開唱前夜，一下子交出 3 首由軒仔本人創作的歌曲Demo 予 Wyman，這件瘋狂的奇事似註定要發生。疫情三年來的首次相聚、到達倫敦一夜的晚飯，交心也交流。Wyman 隨後回家後靈感湧現，一個晝夜交接，已撰好整份歌詞，並隨著一個淡藍色信封，連夜送到軒仔手上。這份禮物有千斤重，再細看，原來更是 Wyman 給香港人的手信。更大膽構想，建議軒仔可否趕及在倫敦演唱會的最後一夜上為觀眾演繹一次...... 午夜收到歌詞、清晨就要邀請 Johnny Yim 編曲、而當晚就要在殿堂中演繹，這件近乎不可能的事情，就是靠著信心和勇氣在 6000 名 Royal Albert Hall 觀眾的見證下完美實現。一切都是巧遇，共同承載這份靈感滿溢的契機，無意間成就了由黃偉文與張敬軒一同建構的一個大型心靈遊樂場音樂企劃，名為《隱形遊樂場》。</p>
             </div>
         </div>
 
         <div class="highlight-item reveal">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
+            <a href="https://www.youtube.com/watch?v=QE1piGBS1sI" target="_blank" class="video-wrapper">
+                <img src="https://img.youtube.com/vi/QE1piGBS1sI/hqdefault.jpg" alt="百年樹木" class="video-cover">
+        
+                <div class="play-overlay"></div>
+        </a>
+
             <div class="highlight-text">
-                <div class="song-meta">2023 • Live Session</div>
-                <h3>回憶錄 (The Memoir) - Acoustic Ver.</h3>
-                <p>褪去了電子合成器的包裝，這是一個只有鋼琴與人聲的純粹版本。錄音室現場錄製的畫面，捕捉了歌手最真實的情感流露。</p>
-                <p>許多歌迷表示，這個不插電版本比原版更能觸動人心，也是夜深人靜時的最佳陪伴。</p>
+                <div class="song-meta">2018 • 經曲作</div>
+                <h3>百年樹木</h3>
+                <p>〈櫻花樹下〉十年後終結篇</p>
+
+                <p>櫻花樹下所述說的青春時所面對的那份尚未說出口而無疾而終的愛情，百年樹本則是帶著這份遺撼長大成人後，再次與當初的那個他相遇，當初既靦腆又緊張的點點滴滴，一幕一幕在心裡重新上演。時至今日，人釋懷了，那份似有還無的愛也需放下了</p>
             </div>
         </div>
+        </div>
+
     </div>
+
     <div class="container" id="channel-section">
         <h2 class="section-title reveal">官方頻道與社群</h2>
 
         <div class="channel-header reveal">
-            <a href="https://www.youtube.com/@YourChannel" target="_blank" class="avatar-box">
-                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=300" alt="Singer Avatar">
+            <a href="https://www.youtube.com/channel/UCgQqWQM2Dx7SZG5_i40-7lQ" target="_blank" class="avatar-box">
+                <img src="https://yt3.googleusercontent.com/YYq4SvPaybhVgaBhDOGIT_rQoXLg7p7jhguPLmDLktSV7aPqj9ss80Whbnzliqp3dTqFgSP-9Q=s160-c-k-c0x00ffffff-no-rj" alt="Singer Avatar">
             </a>
 
             <div class="channel-info">
-                <h3>Singer Name Official TV</h3>
-                <p>訂閱頻道獲取最新音樂錄影帶、幕後花絮與直播紀錄。</p>
+                <h3>張敬軒 Hins Cheung</h3>
+                <p>頻度主要收錄張敬軒所發行的歌曲和演唱會紀錄，也會發佈張敬軒企劃的訪談影片及綜藝節目。</p>
                 
                 <div class="social-icons">
-                    <a href="https://facebook.com" target="_blank" class="social-icon-link">
+                    <a href="https://www.facebook.com/hinscheungofficial/" target="_blank" class="social-icon-link">
                         <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                         <span>Facebook</span>
                     </a>
-                    <a href="https://instagram.com" target="_blank" class="social-icon-link">
+                    <a href="https://www.instagram.com/hinscheung/" target="_blank" class="social-icon-link">
                         <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         <span>Instagram</span>
                     </a>
@@ -629,46 +745,54 @@
 
         <div class="channel-videos">
             <div class="video-card reveal">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/影片ID1" allowfullscreen></iframe>
-                </div>
+                <a href="https://www.youtube.com/watch?v=tGU-86n2rMw" target="_blank" class="video-wrapper" style="width: 100%; flex: auto;">
+                    <img src="https://img.youtube.com/vi/tGU-86n2rMw/maxresdefault.jpg" 
+                         onerror="this.src='https://img.youtube.com/vi/tGU-86n2rMw/hqdefault.jpg'" 
+                         class="video-cover">
+                    <div class="play-overlay" style="width: 50px; height: 50px;"></div>
+                </a>
             </div>
             <div class="video-card reveal">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/影片ID2" allowfullscreen></iframe>
-                </div>
+                <a href="https://www.youtube.com/watch?v=apPZpeQgJto" target="_blank" class="video-wrapper" style="width: 100%; flex: auto;">
+                    <img src="https://img.youtube.com/vi/apPZpeQgJto/maxresdefault.jpg" 
+                         onerror="this.src='https://img.youtube.com/apPZpeQgJto/hqdefault.jpg'" 
+                         class="video-cover">
+                    <div class="play-overlay" style="width: 50px; height: 50px;"></div>
+                </a>
             </div>
+        </div>
         </div>
     </div>
 
-    <footer id="contact">
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>EXPLORE</h4>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Music</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>SOCIAL</h4>
-                <ul>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">YouTube</a></li>
-                    <li><a href="#">Facebook</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>CONTACT</h4>
-                <ul>
-                    <li><a href="#">Management</a></li>
-                    <li><a href="#">Press Inquiry</a></li>
-                    <li><a href="#">Booking</a></li>
-                </ul>
-            </div>
+    <footer>
+    <div class="footer-container">
+
+        <div class="footer-section">
+            <h4>網頁導覽</h4>
+            <ul class="footer-links">
+                <li><a href="#">回到頂端</a></li>
+                <li><a href="#about">歌手簡介</a></li>
+                <li><a href="#music">音樂專輯</a></li>
+                <li><a href="#highlights">歌曲精選</a></li>
+                <li><a href="#channel-section">社群平台</a></li>
+            </ul>
         </div>
-        <div class="copyright">&copy; 2025 SINGER NAME. All Rights Reserved.</div>
+
+        <div class="footer-section">
+            <h4>官方資源</h4>
+            <ul class="footer-links">
+                <li><a href="https://www.youtube.com/channel/UCgQqWQM2Dx7SZG5_i40-7lQ" target="_blank">YouTube 頻道</a></li>
+                <li><a href="https://www.instagram.com/hinscheung/" target="_blank">Instagram</a></li>
+                <li><a href="https://www.facebook.com/hinscheungofficial" target="_blank">Facebook</a></li>
+                <li><a href="https://eeg.zone/#/artist/5" target="_blank">英皇娛樂官網</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="copyright-bar">
+        &copy; 2025 HINS CHEUNG FANMADE SITE. <br>
+        All lyrics and media content belong to their respective owners.<br>
+        &copy; 網頁由 黃凱軒 邱珊倚 胡奇恩 製作.
+    </div>
     </footer>
 
     <script>
